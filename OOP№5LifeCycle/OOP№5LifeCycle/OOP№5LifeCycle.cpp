@@ -124,6 +124,16 @@ int main()
     printf("\n    Опасное приведение (UB): radius = %d", testC->radius);
     delete testF1;
     printf("\n\n    ----|Предварительная проверка типов|----");
+    Figure* testF2 = new Circle(10);
+    Circle* testC2 = (Circle*)testF2;
+    if (testC2->isA("Figure")) {
+        printf("\n    Опасное приведение (с предварительной проверкой): radius = %d", testC2->radius);
+    }
+    else {
+        printf("\n   Опасное приведение (с предварительной проверкой): not Figure");
+    }
+
+    printf("\n\n    ----|Использование стандартных средств языка (dynamic_cast)|----");
 
     printf("\n\n    ----|Деструкторы|----");
 }
