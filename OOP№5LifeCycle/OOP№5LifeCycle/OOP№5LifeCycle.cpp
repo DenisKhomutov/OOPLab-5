@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <stdio.h>
 using namespace std;
 
@@ -15,7 +15,7 @@ public:
     Figure(const Figure& fig) : x(fig.x), y(fig.y) {
         printf("\nКонструктор Figure копирования: x = %d, y = %d", x, y);
     }
-    ~Figure() {
+    virtual ~Figure() {
         printf("\nДеструктор Figure");
     }
 
@@ -86,6 +86,9 @@ int main()
     Circle c1;
     Circle c2(5);
     Circle c3 = c2;
+    printf("\n\n----|Виртуальный деструктор|----");
+    Figure* f = new Circle(50);
+    delete f;
     printf("\n\n----|Методы|----");
     f1.method1();
     c1.method1();
