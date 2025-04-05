@@ -123,6 +123,7 @@ int main()
     Circle* testC1 = (Circle*)testF1;
     printf("\n    Опасное приведение (UB): radius = %d", testC->radius);
     delete testF1;
+
     printf("\n\n    ----|Предварительная проверка типов|----");
     Figure* testF2 = new Circle(10);
     Circle* testC2 = (Circle*)testF2;
@@ -132,8 +133,22 @@ int main()
     else {
         printf("\n   Опасное приведение (с предварительной проверкой): not Figure");
     }
-
+    delete testF2;
     printf("\n\n    ----|Использование стандартных средств языка (dynamic_cast)|----");
-
+    Figure* testFigure = new Circle(99);
+    Circle* testCircle = dynamic_cast<Circle*>(testFigure);
+    if (testCircle) {
+        printf("\n    Приведение с помощью dynamic_cast: radius = %d", testCircle->radius);
+    }
+    delete testFigure;
+    Figure* testFigure1 = new Circle(99);
+    Circle* testCircle1 = dynamic_cast<Circle*>(testFigure1);
+    if (testCircle1) {
+        printf("\n    Приведение с помощью dynamic_cast: radius = %d", testCircle1->radius);
+    }
+    else {
+        printf("\n    not Figure");
+    }
+    delete testFigure1;
     printf("\n\n    ----|Деструкторы|----");
 }
