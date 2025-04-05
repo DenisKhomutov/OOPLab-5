@@ -32,11 +32,11 @@ public:
         cout << "\nFigure method1";
     }
 
-    void virtual method2() {
+    virtual void method2() {
         cout << "\nFigure method2()";
     }
 
-    void virtual method3() {
+    virtual void method3() {
         cout << "\nFigure method3()";
     }
 };
@@ -59,12 +59,15 @@ public:
         printf("\nДеструктор Circle");
     }
 
-    virtual string className() override {
+    string className() override {
         return "Circle";
     }
 
-    virtual bool isA(string clsName) override {
-        return clsName == className() || Figure::isA(clsName);
+    bool isA(string clsName) override {
+        if (clsName == className()) {
+            return true;
+        }
+        return Figure::isA(clsName);
     }
 
     void method2() override {
@@ -79,20 +82,34 @@ public:
 int main()
 {
     setlocale(LC_ALL, "Russian");
-    printf("----|Конструкторы|----");
+    printf("     ----|Конструкторы|----");
     Figure f1;
     Figure f2 = Figure(1, 1);
     Figure f3 = Figure(f2);
     Circle c1;
     Circle c2(5);
     Circle c3 = c2;
-    printf("\n\n----|Виртуальный деструктор|----");
+    printf("\n\n    ----|Виртуальный деструктор|----");
     Figure* f = new Circle(50);
     delete f;
-    printf("\n\n----|Методы|----");
+    printf("\n\n    ----|Методы|----");
+    printf("\n----");
     f1.method1();
+    printf("\n----");
     c1.method1();
+    printf("\n----");
     f1.method3();
+    printf("\n----");
     c1.method3();
-    printf("\n\n----|Деструкторы|----");
+    printf("\n----");
+    printf("\n\n    ----|Принадлежность|----");
+    printf("\nclassName Figure: %s", f1.className().c_str());
+    printf("\nclassName Circle: %s", c1.className().c_str());
+    printf("\nisA Figure (is Figure - Fig?): %d", f1.isA("Fig"));
+    printf("\nisA Figure (is Figure - Figure?): %d", f1.isA("Figure"));
+    printf("\nisA Circle (is Circle - Figure?): %d", c1.isA("Figure"));
+    printf("\nisA Circle (is Circle - Circle?): %d", c1.isA("Circle"));
+    printf("\n\n    ----|Приведение типов|----");
+
+    printf("\n\n    ----|Деструкторы|----");
 }
