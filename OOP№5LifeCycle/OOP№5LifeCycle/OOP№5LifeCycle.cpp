@@ -42,7 +42,7 @@ public:
 };
 
 class Circle : public Figure {
-private:
+public:
     int radius;
 public:
     Circle() {
@@ -82,6 +82,7 @@ public:
 int main()
 {
     setlocale(LC_ALL, "Russian");
+
     printf("     ----|Конструкторы|----");
     Figure f1;
     Figure f2 = Figure(1, 1);
@@ -89,9 +90,11 @@ int main()
     Circle c1;
     Circle c2(5);
     Circle c3 = c2;
+
     printf("\n\n    ----|Виртуальный деструктор|----");
     Figure* f = new Circle(50);
     delete f;
+
     printf("\n\n    ----|Методы|----");
     printf("\n----");
     f1.method1();
@@ -102,6 +105,7 @@ int main()
     printf("\n----");
     c1.method3();
     printf("\n----");
+
     printf("\n\n    ----|Принадлежность|----");
     printf("\nclassName Figure: %s", f1.className().c_str());
     printf("\nclassName Circle: %s", c1.className().c_str());
@@ -109,7 +113,17 @@ int main()
     printf("\nisA Figure (is Figure - Figure?): %d", f1.isA("Figure"));
     printf("\nisA Circle (is Circle - Figure?): %d", c1.isA("Figure"));
     printf("\nisA Circle (is Circle - Circle?): %d", c1.isA("Circle"));
-    printf("\n\n    ----|Приведение типов|----");
+
+    printf("\n\n    ----|Опасное приведение типов|----");
+    Figure* testF = new Circle(10);
+    Circle* testC = (Circle*)testF;
+    printf("\n    Опасное приведение: radius = %d", testC->radius);
+    delete testF;
+    Figure* testF1 = new Figure(5,5);
+    Circle* testC1 = (Circle*)testF1;
+    printf("\n    Опасное приведение (UB): radius = %d", testC->radius);
+    delete testF1;
+    printf("\n\n    ----|Предварительная проверка типов|----");
 
     printf("\n\n    ----|Деструкторы|----");
 }
