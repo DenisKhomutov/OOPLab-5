@@ -38,10 +38,10 @@ public:
 	}
 };
 
-void func1(Base obj) {
+void func1(Base obj) { // Копируется оригинал, изменяется копия (оригинал не изменяется), копия удаляется
 
 };
-void func2(Base* obj) {
+void func2(Base* obj) { // Работаем с оригинальным объектом и можем его изменить
 	Desc* newdesc = dynamic_cast<Desc*>(obj);
 	if (newdesc) {
 		printf("\nОбъект класса Desc");
@@ -53,33 +53,50 @@ void func2(Base* obj) {
 void func3(Base& obj) {
 
 };
+void func4(shared_ptr<Base> p)
+{
+	printf("\nshared_ptr transfer, count = %d", p.use_count());
+}
+void func5(unique_ptr<Base> p)
+{
+	printf("\nunique_ptr transfer");
+}
 
 Base rfunc1() {
 	Base base;
 	return base;
 }
-
 Base* rfunc2() { // Неопр. пов.
 	Base base;
 	return &base;
 }
-
 Base& rfunc3() { // Неопр. пов.
 	Base base;
 	return base;
 }
 
-Base rfunc4() {
+Base rfunc4() { // Утечка памяти, не удаляется динамический объект
 	Base* base = new Base();
 	return  *base;
 }
-Base* rfunc5() {
+Base* rfunc5() { // Возвращается адрес объекта, потенциальная утечка памяти если забыть удалить
 	Base* base = new Base();
 	return base;
 }
-Base& rfunc6() {
+Base& rfunc6() { // Утечка памяти, можно удалить использовав delete &base
 	Base* base = new Base();
 	return *base;
+}
+
+unique_ptr<Base> rfunc7() {
+	unique_ptr <Base> p = make_unique<Base>();
+	printf("\nunique_ptr return");
+	return p;
+}
+shared_ptr<Base> rfunc8() {
+	shared_ptr<Base> p = make_shared<Base>();
+	printf("\nshared_ptr return");
+	return p;
 }
 
 int main() {
@@ -157,9 +174,15 @@ int main() {
 	}
 	printf("\n    После блока: использований = %d", sharedBase1.use_count());
 
-	sharedBase1.reset();
-	sharedBase2.reset();
-	printf("\n    После reset: использований = %d", sharedBase2.use_count());
-
+	unique_ptr<Base> p1 = make_unique<Base>();
+	func5(move(p1)); // Передача
+	printf("\n----");
+	unique_ptr<Base> p2 = rfunc7(); // Возврат
+	printf("\n----");
+	shared_ptr<Base> p3 = make_shared<Base>();
+	//func4(p3);
+	func4(move(p3));
+	printf("\n----");
+	shared_ptr<Base> p4 = rfunc8();
 	printf("\n\n   Деструкторы: ");
 }
